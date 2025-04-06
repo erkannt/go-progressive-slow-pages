@@ -11,7 +11,15 @@ func main() {
 	})
 	e.GET("/search", func(c echo.Context) error {
 		query := c.QueryParam("q")
-		return page(search(query)).Render(c.Request().Context(), c.Response().Writer)
+		var results []string
+		if query != "" {
+			results = []string{
+				"a result",
+				"another result",
+				"and yet another result",
+			}
+		}
+		return page(search(query, results)).Render(c.Request().Context(), c.Response().Writer)
 	})
 	e.Logger.Fatal(e.Start(":8080"))
 }

@@ -1,0 +1,30 @@
+package main
+
+templ search(query string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<title>Search | go-progressive-search</title>
+		</head>
+		<body>
+			<section>
+				<h1>Search</h1>
+			</section>
+			<section>
+				<search>
+					<form action="/search">
+						<label for="search">Perform a slow search</label>
+						<input type="search" id="search" name="q" value={ query }/>
+						<button type="submit">Search</button>
+					</form>
+				</search>
+				<ul>
+					<li>a result</li>
+					<li>another result</li>
+					<li>and yet another result</li>
+				</ul>
+			</section>
+		</body>
+	</html>
+}

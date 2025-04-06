@@ -1,0 +1,11 @@
+package main
+
+templ SearchBar(query string) {
+	<search>
+		<form action="/search">
+			<label for="search">Perform a slow search</label>
+			<input type="search" id="search" name="q" value={ query }/>
+			<button type="submit">Search</button>
+		</form>
+	</search>
+}

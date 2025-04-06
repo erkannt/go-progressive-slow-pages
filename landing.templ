@@ -1,26 +1,11 @@
 package main
 
 templ landing() {
-	<!DOCTYPE html>
-	<html lang="en">
-		<head>
-			<meta charset="UTF-8"/>
-			<title>go-progressive-search</title>
-		</head>
-		<body>
-			<section>
-				<h1>go-progressive-search</h1>
-				<p>Progressive enhancement a of slow search results page</p>
-			</section>
-			<section>
-				<search>
-					<form action="/search">
-						<label for="search">Perform a slow search</label>
-						<input type="search" id="search" name="q"/>
-						<button type="submit">Search</button>
-					</form>
-				</search>
-			</section>
-		</body>
-	</html>
+	<header>
+		<h1>go-progressive-search</h1>
+		<p>Progressive enhancement a of slow search results page</p>
+	</header>
+	<main>
+		@SearchBar("")
+	</main>
 }

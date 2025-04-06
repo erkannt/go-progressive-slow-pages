@@ -8,8 +8,19 @@ templ landing(name string) {
 			<title>go-progressive-search</title>
 		</head>
 		<body>
-			<h1>go-progressive-search</h1>
-			<p>Progressive enhancement a of slow search results page</p>
+			<section>
+				<h1>go-progressive-search</h1>
+				<p>Progressive enhancement a of slow search results page</p>
+			</section>
+			<section>
+				<search>
+					<form action="/search">
+						<label for="search">Perform a slow search</label>
+						<input type="search" id="search" name="q"/>
+						<button type="submit">Search</button>
+					</form>
+				</search>
+			</section>
 		</body>
 	</html>
 }

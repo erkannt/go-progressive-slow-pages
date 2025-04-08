@@ -11,8 +11,9 @@ func main() {
 	})
 	e.GET("/search", func(c echo.Context) error {
 		query := c.QueryParam("q")
+		result_count := 3
 		results := getResults(query)
-		return page(search(query, results)).Render(c.Request().Context(), c.Response().Writer)
+		return page(search(query, result_count, results)).Render(c.Request().Context(), c.Response().Writer)
 	})
 	e.Logger.Fatal(e.Start(":8080"))
 }

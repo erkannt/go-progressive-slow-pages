@@ -1,6 +1,8 @@
 package main
 
-templ search(query string, results []string) {
+import "fmt"
+
+templ search(query string, result_count int, results []string) {
 	<header>
 		<nav><a href="/">Home</a></nav>
 		<h1>Search</h1>
@@ -8,6 +10,7 @@ templ search(query string, results []string) {
 	<section>
 		@SearchBar(query)
 		if len(results) > 0 {
+			<p>We have found { fmt.Sprintf("%d", result_count) } results.</p>
 			<ul>
 				for _, item := range results {
 					<li>{ item }</li>

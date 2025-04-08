@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -12,13 +14,13 @@ func main() {
 	e.GET("/search", func(c echo.Context) error {
 		query := c.QueryParam("q")
 		result_count := 3
-		results := getResults(query)
-		return page(search(query, result_count, results)).Render(c.Request().Context(), c.Response().Writer)
+		result_details := getResultDetails(query)
+		return page(search(query, result_count, result_details)).Render(c.Request().Context(), c.Response().Writer)
 	})
 	e.Logger.Fatal(e.Start(":8080"))
 }
 
-func getResults(query string) []string {
+func getResultDetails(query string) []string {
 	var results []string
 	if query != "" {
 		results = []string{
@@ -27,5 +29,6 @@ func getResults(query string) []string {
 			"and yet another result",
 		}
 	}
+	time.Sleep(2 * time.Second)
 	return results
 }

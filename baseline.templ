@@ -1,0 +1,16 @@
+package main
+
+templ baseline(results []string) {
+	<header>
+		<nav><a href="/">Home</a></nav>
+		<h1>Baseline</h1>
+		<p>Slow data is fetched and rendered before the HTML response is made.</p>
+	</header>
+	<section>
+		<ul>
+			for _, item := range results {
+				<li>{ item }</li>
+			}
+		</ul>
+	</section>
+}

@@ -72,11 +72,13 @@ func slotsHandler(c echo.Context) error {
 			<p>Full page is sent with template slots. Afterwards slow content is sent to populate the slots.</p>
 		</header>
 		<section>
-			<slot name="1"><div>Loading 1...</div></slot>
-			<slot name="2"><div>Loading 2...</div></slot>
-			<slot name="3"><div>Loading 3...</div></slot>
-			<slot name="4"><div>Loading 4...</div></slot>
-			<slot name="5"><div>Loading 5...</div></slot>
+			<ul>
+			<slot name="1"><li>Loading 1...</li></slot>
+			<slot name="2"><li>Loading 2...</li></slot>
+			<slot name="3"><li>Loading 3...</li></slot>
+			<slot name="4"><li>Loading 4...</li></slot>
+			<slot name="5"><li>Loading 5...</li></slot>
+			</ul>
 		</section>
 	</template>
 	`)
@@ -84,7 +86,7 @@ func slotsHandler(c echo.Context) error {
 
 	for i := range 5 {
 		time.Sleep(1 * time.Second)
-		fmt.Fprintf(c.Response().Writer, "<div slot=\"%d\">Chunk %d</div>\n", i+1, i+1)
+		fmt.Fprintf(c.Response().Writer, "<li slot=\"%d\">Chunk %d</li>\n", i+1, i+1)
 		flusher.Flush()
 	}
 	fmt.Fprintf(c.Response().Writer, "</body></html>")

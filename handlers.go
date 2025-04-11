@@ -26,7 +26,7 @@ func chunkedHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	fmt.Fprintf(w, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Search | go-progressive-search</title></head><body><header><nav><a href=\"/\">Home</a></nav><h1>Chunked</h1><p>Partial html page is sent before sending slow data chunk by chunk. The final chunk completes the HTML page</p></header><section><ul>")
 	flusher.Flush()
 
-	for i := 0; i < 5; i++ {
+	for i := range 5 {
 		time.Sleep(1 * time.Second)
 		fmt.Fprintf(w, "<li>Chunk %d</li>\n", i+1)
 		flusher.Flush()

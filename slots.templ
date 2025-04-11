@@ -8,6 +8,7 @@ templ slots(resultCount int, results chan Chunk) {
 			<nav><a href="/">Home</a></nav>
 			<h1>Slots using templ</h1>
 			<p>Same as <a href="/slots">slots</a> but using a <a href="https://templ.guide/server-side-rendering/streaming/#suspense">slots aware template</a>.</p>
+			<p>This works without clientside JS thanks to <a href="https://caniuse.com/declarative-shadow-dom">Declarative Shadow DOM</a> becoming available across browsers as part of <a href="https://web.dev/articles/declarative-shadow-dom">Baseline 2024</a>.</p>
 		</header>
 		<section>
 			<ul>

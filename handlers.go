@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/a-h/templ"
@@ -88,6 +89,31 @@ func slotsHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		flusher.Flush()
 	}
 	fmt.Fprintf(w, "</body></html>")
+}
+
+type Chunk struct {
+	name    string
+	content string
+}
+
+func slotsWithTemplHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+
+	results := make(chan Chunk)
+
+	resultCount := 5
+	go func() {
+		defer close(results)
+		for i := range resultCount {
+			select {
+			case <-r.Context().Done():
+				return
+			case <-time.After(time.Second):
+				results <- Chunk{name: strconv.Itoa(i + 1), content: fmt.Sprintf("Chunk %d", i+1)}
+			}
+		}
+	}()
+
+	templ.Handler(page(slots(resultCount, results)), templ.WithStreaming()).ServeHTTP(w, r)
 }
 
 func getResults() []string {

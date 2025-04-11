@@ -1,0 +1,26 @@
+package main
+
+import "strconv"
+
+templ slots(resultCount int, results chan Chunk) {
+	<template shadowrootmode="open">
+		<header>
+			<nav><a href="/">Home</a></nav>
+			<h1>Slots using templ</h1>
+			<p>Same as <a href="/slots">slots</a> but using a <a href="https://templ.guide/server-side-rendering/streaming/#suspense">slots aware template</a>.</p>
+		</header>
+		<section>
+			<ul>
+				for i := range resultCount {
+					<slot name={ strconv.Itoa(i + 1) }><li>Loading {  strconv.Itoa(i+1) }...</li></slot>
+				}
+			</ul>
+		</section>
+	</template>
+	@templ.Flush()
+	for item := range results {
+		@templ.Flush() {
+			<li slot={ item.name }>{  item.content }</li>
+		}
+	}
+}

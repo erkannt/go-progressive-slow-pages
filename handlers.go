@@ -56,6 +56,40 @@ func chunkedWithTemplHandler(c echo.Context) error {
 	return nil
 }
 
+func slotsHandler(c echo.Context) error {
+	c.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
+	c.Response().Header().Set("Transfer-Encoding", "chunked")
+	flusher, _ := c.Response().Writer.(http.Flusher)
+
+	fmt.Fprintf(c.Response().Writer, `
+	<!doctype html><html lang="en"><head><meta charset="UTF-8"><title>Search | go-progressive-search</title></head>
+	<body>
+		<header>
+			<nav><a href="/">Home</a></nav>
+			<h1>Chunked</h1>
+			<p>Full page is sent with template slots. Afterwards slow content is sent to populate the slots.</p>
+		</header>
+		<section>
+				<template shadowrootmode="open">
+					<slot name="1"><div>Loading 1...</div></slot>
+					<slot name="2"><div>Loading 2...</div></slot>
+					<slot name="3"><div>Loading 3...</div></slot>
+					<slot name="4"><div>Loading 4...</div></slot>
+					<slot name="5"><div>Loading 5...</div></slot>
+				</template>
+	`)
+	flusher.Flush()
+
+	for i := range 5 {
+		time.Sleep(1 * time.Second)
+		fmt.Fprintf(c.Response().Writer, "<div slot=\"%d\">Chunk %d</div>\n", i+1, i+1)
+		flusher.Flush()
+	}
+	fmt.Fprintf(c.Response().Writer, "</section></body></html>")
+
+	return nil
+}
+
 func getResults() []string {
 	results := []string{
 		"a result",

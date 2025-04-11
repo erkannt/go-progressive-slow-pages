@@ -11,6 +11,7 @@ func main() {
 	e.GET("/baseline", baselineHandler)
 	e.GET("/chunked", chunkedHandler)
 	e.GET("/chunked-templ", chunkedWithTemplHandler)
+	e.GET("/slots", slotsHandler)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

@@ -62,21 +62,23 @@ func slotsHandler(c echo.Context) error {
 	flusher, _ := c.Response().Writer.(http.Flusher)
 
 	fmt.Fprintf(c.Response().Writer, `
-	<!doctype html><html lang="en"><head><meta charset="UTF-8"><title>Search | go-progressive-search</title></head>
+	<!doctype html><html lang="en">
+	<head><meta charset="UTF-8"><title>Search | go-progressive-search</title></head>
 	<body>
+	<template shadowrootmode="open">
 		<header>
 			<nav><a href="/">Home</a></nav>
 			<h1>Chunked</h1>
 			<p>Full page is sent with template slots. Afterwards slow content is sent to populate the slots.</p>
 		</header>
 		<section>
-				<template shadowrootmode="open">
-					<slot name="1"><div>Loading 1...</div></slot>
-					<slot name="2"><div>Loading 2...</div></slot>
-					<slot name="3"><div>Loading 3...</div></slot>
-					<slot name="4"><div>Loading 4...</div></slot>
-					<slot name="5"><div>Loading 5...</div></slot>
-				</template>
+			<slot name="1"><div>Loading 1...</div></slot>
+			<slot name="2"><div>Loading 2...</div></slot>
+			<slot name="3"><div>Loading 3...</div></slot>
+			<slot name="4"><div>Loading 4...</div></slot>
+			<slot name="5"><div>Loading 5...</div></slot>
+		</section>
+	</template>
 	`)
 	flusher.Flush()
 
@@ -85,7 +87,7 @@ func slotsHandler(c echo.Context) error {
 		fmt.Fprintf(c.Response().Writer, "<div slot=\"%d\">Chunk %d</div>\n", i+1, i+1)
 		flusher.Flush()
 	}
-	fmt.Fprintf(c.Response().Writer, "</section></body></html>")
+	fmt.Fprintf(c.Response().Writer, "</body></html>")
 
 	return nil
 }

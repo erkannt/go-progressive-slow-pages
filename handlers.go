@@ -6,37 +6,36 @@ import (
 	"time"
 
 	"github.com/a-h/templ"
-	"github.com/labstack/echo/v4"
+	"github.com/julienschmidt/httprouter"
 )
 
-func landingHandler(c echo.Context) error {
-	return page(landing()).Render(c.Request().Context(), c.Response().Writer)
+func landingHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	page(landing()).Render(r.Context(), w)
 }
 
-func baselineHandler(c echo.Context) error {
+func baselineHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	results := getResults()
-	return page(baseline(results)).Render(c.Request().Context(), c.Response().Writer)
+	page(baseline(results)).Render(r.Context(), w)
 }
 
-func chunkedHandler(c echo.Context) error {
-	c.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
-	c.Response().Header().Set("Transfer-Encoding", "chunked")
-	flusher, _ := c.Response().Writer.(http.Flusher)
+func chunkedHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Transfer-Encoding", "chunked")
+	flusher, _ := w.(http.Flusher)
 
-	fmt.Fprintf(c.Response().Writer, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Search | go-progressive-search</title></head><body><header><nav><a href=\"/\">Home</a></nav><h1>Chunked</h1><p>Partial html page is sent before sending slow data chunk by chunk. The final chunk completes the HTML page</p></header><section><ul>")
+	fmt.Fprintf(w, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Search | go-progressive-search</title></head><body><header><nav><a href=\"/\">Home</a></nav><h1>Chunked</h1><p>Partial html page is sent before sending slow data chunk by chunk. The final chunk completes the HTML page</p></header><section><ul>")
 	flusher.Flush()
 
 	for i := 0; i < 5; i++ {
 		time.Sleep(1 * time.Second)
-		fmt.Fprintf(c.Response().Writer, "<li>Chunk %d</li>\n", i+1)
+		fmt.Fprintf(w, "<li>Chunk %d</li>\n", i+1)
 		flusher.Flush()
 	}
 
-	fmt.Fprintln(c.Response().Writer, "</ul><p>Done</p></section></body></html>")
-	return nil
+	fmt.Fprintln(w, "</ul><p>Done</p></section></body></html>")
 }
 
-func chunkedWithTemplHandler(c echo.Context) error {
+func chunkedWithTemplHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	results := make(chan string)
 
@@ -44,7 +43,7 @@ func chunkedWithTemplHandler(c echo.Context) error {
 		defer close(results)
 		for i := range 5 {
 			select {
-			case <-c.Request().Context().Done():
+			case <-r.Context().Done():
 				return
 			case <-time.After(time.Second):
 				results <- fmt.Sprintf("Chunk %d", i+1)
@@ -52,16 +51,15 @@ func chunkedWithTemplHandler(c echo.Context) error {
 		}
 	}()
 
-	templ.Handler(page(chunked(results)), templ.WithStreaming()).ServeHTTP(c.Response().Writer, c.Request())
-	return nil
+	templ.Handler(page(chunked(results)), templ.WithStreaming()).ServeHTTP(w, r)
 }
 
-func slotsHandler(c echo.Context) error {
-	c.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
-	c.Response().Header().Set("Transfer-Encoding", "chunked")
-	flusher, _ := c.Response().Writer.(http.Flusher)
+func slotsHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Transfer-Encoding", "chunked")
+	flusher, _ := w.(http.Flusher)
 
-	fmt.Fprintf(c.Response().Writer, `
+	fmt.Fprintf(w, `
 	<!doctype html><html lang="en">
 	<head><meta charset="UTF-8"><title>Search | go-progressive-search</title></head>
 	<body>
@@ -86,12 +84,10 @@ func slotsHandler(c echo.Context) error {
 
 	for i := range 5 {
 		time.Sleep(1 * time.Second)
-		fmt.Fprintf(c.Response().Writer, "<li slot=\"%d\">Chunk %d</li>\n", i+1, i+1)
+		fmt.Fprintf(w, "<li slot=\"%d\">Chunk %d</li>\n", i+1, i+1)
 		flusher.Flush()
 	}
-	fmt.Fprintf(c.Response().Writer, "</body></html>")
-
-	return nil
+	fmt.Fprintf(w, "</body></html>")
 }
 
 func getResults() []string {

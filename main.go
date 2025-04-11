@@ -1,17 +1,20 @@
 package main
 
 import (
-	"github.com/labstack/echo/v4"
+	"log"
+	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
-	e := echo.New()
+	router := httprouter.New()
 
-	e.GET("/", landingHandler)
-	e.GET("/baseline", baselineHandler)
-	e.GET("/chunked", chunkedHandler)
-	e.GET("/chunked-templ", chunkedWithTemplHandler)
-	e.GET("/slots", slotsHandler)
+	router.GET("/", landingHandler)
+	router.GET("/baseline", baselineHandler)
+	router.GET("/chunked", chunkedHandler)
+	router.GET("/chunked-templ", chunkedWithTemplHandler)
+	router.GET("/slots", slotsHandler)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	log.Fatal(http.ListenAndServe(":8080", router))
 }

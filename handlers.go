@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 )
 
@@ -32,6 +33,26 @@ func chunkedHandler(c echo.Context) error {
 	}
 
 	fmt.Fprintln(c.Response().Writer, "</ul><p>Done</p></section></body></html>")
+	return nil
+}
+
+func chunkedWithTemplHandler(c echo.Context) error {
+
+	results := make(chan string)
+
+	go func() {
+		defer close(results)
+		for i := range 5 {
+			select {
+			case <-c.Request().Context().Done():
+				return
+			case <-time.After(time.Second):
+				results <- fmt.Sprintf("Chunk %d", i+1)
+			}
+		}
+	}()
+
+	templ.Handler(page(chunked(results)), templ.WithStreaming()).ServeHTTP(c.Response().Writer, c.Request())
 	return nil
 }
 

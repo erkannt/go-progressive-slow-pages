@@ -10,6 +10,7 @@ func main() {
 	e.GET("/", landingHandler)
 	e.GET("/baseline", baselineHandler)
 	e.GET("/chunked", chunkedHandler)
+	e.GET("/chunked-templ", chunkedWithTemplHandler)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

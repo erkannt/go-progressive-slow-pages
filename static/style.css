@@ -1,0 +1,15 @@
+body {
+  max-width: 90ch;
+  margin: 0 auto;
+  min-height: 1vh;
+  background-color: wheat;
+  padding: 5rem 1rem;
+}
+
+progress {
+  width: 100%;
+}
+
+:has-slotted + progress {
+  display: none;
+}

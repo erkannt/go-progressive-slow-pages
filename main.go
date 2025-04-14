@@ -17,6 +17,7 @@ func main() {
 	router.GET("/slots", slotsHandler)
 	router.GET("/slots-templ", slotsWithTemplHandler)
 	router.GET("/progress-bar", progressBarHandler)
+	router.ServeFiles("/static/*filepath", http.Dir("./static"))
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

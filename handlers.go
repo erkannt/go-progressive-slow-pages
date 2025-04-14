@@ -130,6 +130,26 @@ func slotsWithTemplHandler(w http.ResponseWriter, r *http.Request, _ httprouter.
 	templ.Handler(page(slots(resultCount, results)), templ.WithStreaming()).ServeHTTP(w, r)
 }
 
+func progressBarHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+
+	results := make(chan Chunk)
+
+	resultCount := 5
+	go func() {
+		defer close(results)
+		for i := range resultCount {
+			select {
+			case <-r.Context().Done():
+				return
+			case <-time.After(time.Second):
+				results <- Chunk{name: strconv.Itoa(i + 1), content: fmt.Sprintf("Chunk %d", i+1)}
+			}
+		}
+	}()
+
+	templ.Handler(page(progressBar(resultCount, results)), templ.WithStreaming()).ServeHTTP(w, r)
+}
+
 func getResults() []string {
 	results := []string{
 		"Chunk 1",

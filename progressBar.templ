@@ -1,0 +1,26 @@
+package main
+
+import "strconv"
+
+templ progressBar(resultCount int, results chan Chunk) {
+	<template shadowrootmode="open">
+		<header>
+			<nav><a href="/">Home</a></nav>
+			<h1>Progress Bar</h1>
+			<p>Show a progress bar until all content is available. Progress is based on data from server. Still no JS needed.</p>
+		</header>
+		<section>
+			<ul>
+				for i := range resultCount {
+					<slot name={ strconv.Itoa(i + 1) }><li>Loading {  strconv.Itoa(i+1) }...</li></slot>
+				}
+			</ul>
+		</section>
+	</template>
+	@templ.Flush()
+	for item := range results {
+		@templ.Flush() {
+			<li slot={ item.name }>{  item.content }</li>
+		}
+	}
+}

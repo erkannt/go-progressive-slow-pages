@@ -16,6 +16,7 @@ func main() {
 	router.GET("/chunked-templ", chunkedWithTemplHandler)
 	router.GET("/slots", slotsHandler)
 	router.GET("/slots-templ", slotsWithTemplHandler)
+	router.GET("/progress-bar", progressBarHandler)
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

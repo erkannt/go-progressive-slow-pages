@@ -24,7 +24,21 @@ func chunkedHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	w.Header().Set("Transfer-Encoding", "chunked")
 	flusher, _ := w.(http.Flusher)
 
-	fmt.Fprintf(w, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Search | go-progressive-search</title></head><body><header><nav><a href=\"/\">Home</a></nav><h1>Chunked</h1><p>Partial html page is sent before sending slow data chunk by chunk. The final chunk completes the HTML page</p></header><section><ul>")
+	fmt.Fprintf(w, `
+	<!doctype html><html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Progressive Slow Pages</title>
+	</head>
+	<body>
+	<header>
+		<nav><a href="/">Home</a></nav>
+		<h1>Chunked</h1>
+		<p>Partial html page is sent before sending slow data chunk by chunk. The final chunk completes the HTML page</p>
+	</header>
+	<section>
+		<ul>
+	`)
 	flusher.Flush()
 
 	for i := range 5 {
@@ -62,12 +76,12 @@ func slotsHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	fmt.Fprintf(w, `
 	<!doctype html><html lang="en">
-	<head><meta charset="UTF-8"><title>Search | go-progressive-search</title></head>
+	<head><meta charset="UTF-8"><title>Progressive Slow Pages</title></head>
 	<body>
 	<template shadowrootmode="open">
 		<header>
 			<nav><a href="/">Home</a></nav>
-			<h1>Chunked</h1>
+			<h1>Slots</h1>
 			<p>Full page is sent with template slots. Afterwards slow content is sent to populate the slots.</p>
 		</header>
 		<section>
@@ -118,9 +132,11 @@ func slotsWithTemplHandler(w http.ResponseWriter, r *http.Request, _ httprouter.
 
 func getResults() []string {
 	results := []string{
-		"a result",
-		"another result",
-		"and yet another result",
+		"Chunk 1",
+		"Chunk 2",
+		"Chunk 3",
+		"Chunk 4",
+		"Chunk 5",
 	}
 	time.Sleep(2 * time.Second)
 	return results

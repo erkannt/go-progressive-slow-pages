@@ -1,9 +1,35 @@
+html {
+  line-height: 1.5;
+  font-size: 150%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
   max-width: 90ch;
   margin: 0 auto;
-  min-height: 1vh;
+  min-height: 100vh;
   background-color: wheat;
   padding: 5rem 1rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: teal;
+  text-wrap: balance;
+}
+
+:any-link {
+  color: rebeccapurple;
+}
+
+:any-link:hover {
+  text-decoration-thickness: 3px;
+}
+
+a {
+  text-decoration-skip-ink: auto;
 }
 
 progress {

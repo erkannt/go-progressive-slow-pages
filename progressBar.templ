@@ -1,6 +1,8 @@
 package main
 
-templ progressBar(resultCount int, results chan Chunk) {
+import "strconv"
+
+templ progressBar(percentDone chan int, results chan string) {
 	<template shadowrootmode="open">
 		<link rel="stylesheet" href="/static/style.css"/>
 		<header>
@@ -10,16 +12,22 @@ templ progressBar(resultCount int, results chan Chunk) {
 		</header>
 		<section>
 			<div aria-busy="true" aria-describedby="progress-bar">
-				<slot name="chunks"></slot>
-				<progress id="progress-bar" aria-label="Chunks loading..."></progress>
+				<slot name="results" id="results"></slot>
+				<slot name="progress-bar" id="progress-bar">
+					<progress id="progress-bar" value="5" max="100"></progress>
+				</slot>
 			</div>
 		</section>
 	</template>
 	@templ.Flush()
-	<ul slot="chunks">
-		for item := range results {
-			<li>{  item.content }</li>
+	for percent := range percentDone {
+		@templ.Flush() {
+			<progress id="progress-bar" slot="progress-bar" value={ strconv.Itoa(percent) } max="100"></progress>
+		}
+	}
+	<ul slot="results">
+		for r := range results {
+			<li>{ r }</li>
 		}
 	</ul>
-	@templ.Flush()
 }

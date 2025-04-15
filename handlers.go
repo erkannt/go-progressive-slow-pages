@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -132,22 +133,27 @@ func slotsWithTemplHandler(w http.ResponseWriter, r *http.Request, _ httprouter.
 
 func progressBarHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
-	results := make(chan Chunk)
-
+	// resultsAccumulator := []string{}
 	resultCount := 5
+
+	percentDone := make(chan int)
+	results := make(chan string, resultCount)
+
 	go func() {
+		defer close(percentDone)
 		defer close(results)
 		for i := range resultCount {
 			select {
 			case <-r.Context().Done():
 				return
-			case <-time.After(time.Second):
-				results <- Chunk{name: strconv.Itoa(i + 1), content: fmt.Sprintf("Chunk %d", i+1)}
+			case <-time.After(time.Millisecond * 500):
+				percentDone <- int(math.Round(float64(i+1) / float64(resultCount) * 100))
+				results <- fmt.Sprintf("Result %d", i+1)
 			}
 		}
 	}()
 
-	templ.Handler(page(progressBar(resultCount, results)), templ.WithStreaming()).ServeHTTP(w, r)
+	templ.Handler(page(progressBar(percentDone, results)), templ.WithStreaming()).ServeHTTP(w, r)
 }
 
 func getResults() []string {

@@ -34,8 +34,17 @@ a {
 
 progress {
   width: 100%;
+  height: 60px;
+}
+
+progress:not(:last-child) {
+  display: none;
 }
 
 :has-slotted + progress {
+  display: none;
+}
+
+:has-slotted + * {
   display: none;
 }

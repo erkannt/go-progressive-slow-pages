@@ -7,7 +7,7 @@ templ slots(resultCount int, results chan Chunk) {
 		<header>
 			<nav><a href="/">Home</a></nav>
 			<h1>Slots using templ</h1>
-			<p>Same as <a href="/slots">slots</a> but using a <a href="https://templ.guide/server-side-rendering/streaming/#suspense">slots aware template</a>.</p>
+			<p>Similar to <a href="/slots">slots</a> but using a <a href="https://templ.guide/server-side-rendering/streaming/#suspense">slots aware template</a>.</p>
 			<p>This works without clientside JS thanks to <a href="https://caniuse.com/declarative-shadow-dom">Declarative Shadow DOM</a> becoming available across browsers as part of <a href="https://web.dev/articles/declarative-shadow-dom">Baseline 2024</a>.</p>
 		</header>
 		<section>
@@ -17,6 +17,15 @@ templ slots(resultCount int, results chan Chunk) {
 				}
 			</ul>
 		</section>
+		<footer>
+			<p>
+				Vel tenetur placeat quis. Officiis sed et eveniet nobis vero in id. Sed iste quae at. Voluptas eveniet necessitatibus qui voluptates illo ullam aut. Eaque iste possimus quisquam ipsam corrupti corporis at quia.
+				Dolores quas et qui in quam quo sed quo. Quibusdam beatae mollitia reiciendis omnis. Voluptatibus iusto unde voluptas rerum. Vel rerum praesentium a voluptatum aspernatur accusamus. Vero cum doloribus quasi numquam quia quia. Vel explicabo quod distinctio accusamus qui voluptatibus sed illo.
+				Aspernatur quisquam facere voluptatem rerum voluptas consequatur. Architecto inventore debitis consectetur velit odit consequatur et. Incidunt cum consequatur temporibus eligendi quis aut.
+				Modi et dignissimos asperiores iure quaerat voluptas. Id dicta rem sapiente. Nemo eveniet accusamus amet autem. Qui omnis consequuntur optio occaecati rerum vel enim consequatur.
+				Voluptas et in consequatur omnis quo et aut quas. Qui amet illo dolore pariatur. Sed voluptas quis accusantium ea ut. Est itaque porro maiores porro et et occaecati.
+			</p>
+		</footer>
 	</template>
 	@templ.Flush()
 	for item := range results {

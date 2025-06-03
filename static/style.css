@@ -41,10 +41,6 @@ progress:not(:last-child) {
   display: none;
 }
 
-:has-slotted + progress {
-  display: none;
-}
-
 :has-slotted + * {
   display: none;
 }
